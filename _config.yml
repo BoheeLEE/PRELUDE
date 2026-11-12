@@ -1,0 +1,12 @@
+# Site-wide settings. Edit the text after the colon.
+title: PRELUDE Study
+description: "Preventative strategies for improving lung health in children, from womb to early childhood."
+institution: "National Heart and Lung Institute, Imperial College London"
+
+# Shown in the footer of every page
+funding_note: "This study is funded by the NIHR <mark class=\"todo\">TODO: scheme and award reference</mark>. The views expressed are those of the author(s) and not necessarily those of the NIHR or the Department of Health and Social Care."
+
+# Do not change below this line
+markdown: kramdown
+exclude:
+  - README.md

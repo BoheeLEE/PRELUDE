@@ -1,0 +1,19 @@
+# Menu tabs, in order. "file" must match the page's file name.
+- title: About
+  url: index.html
+  file: index.md
+- title: Team
+  url: team.html
+  file: team.md
+- title: How to get involved
+  url: get-involved.html
+  file: get-involved.md
+- title: PPIE
+  url: ppie.html
+  file: ppie.md
+- title: News & Publications
+  url: news.html
+  file: news.md
+- title: Contact
+  url: contact.html
+  file: contact.md

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.file_title %}{{ page.file_title }} · {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="container nav" aria-label="Main">
+      <a class="logo" href="index.html">PRELUDE<span>.</span></a>
+      <ul>
+        {% for item in site.data.navigation %}
+        <li><a class="link" href="{{ item.url }}"{% if page.path == item.file %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="container">
+      {% if page.eyebrow %}<div class="eyebrow">{{ page.eyebrow }}</div>{% endif %}
+      <h1>{{ page.heading }}</h1>
+      {% if page.lead %}<p class="lead">{{ page.lead }}</p>{% endif %}
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="content">
+      {{ content }}
+    </section>
+
+    {% comment %} Goals cards: filled from "goals:" at the top of a page file {% endcomment %}
+    {% if page.goals and page.goals.size > 0 %}
+    <section class="content">
+      <h2>{{ page.goals_heading | default: "Our goals" }}</h2>
+      <div class="grid">
+        {% for goal in page.goals %}
+        <div class="card">
+          <h3>{{ goal.title }}</h3>
+          <p>{{ goal.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% comment %} Sign-up form: filled from "form_url:" at the top of a page file {% endcomment %}
+    {% if page.form_url and page.form_url != "" %}
+    <section class="content">
+      {% if page.form_heading %}<h2>{{ page.form_heading }}</h2>{% endif %}
+      <div class="form-wrap">
+        <iframe src="{{ page.form_url }}" title="Sign-up form" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <p class="small">Form not showing? <a href="{{ page.form_url }}" target="_blank" rel="noopener">Open it in a new tab</a>.</p>
+    </section>
+    {% endif %}
+
+    {% comment %} News list: filled from "upcoming:" and "items:" at the top of a page file {% endcomment %}
+    {% if page.upcoming and page.upcoming.size > 0 %}
+    <section class="content">
+      <h2>Coming up</h2>
+      {% for item in page.upcoming %}
+      <article class="news-item">
+        <time>{{ item.date }}</time> <span class="tag">{{ item.type }}</span>
+        <h3>{% if item.link %}<a href="{{ item.link }}">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}</h3>
+        {% if item.text %}<p>{{ item.text }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if page.items and page.items.size > 0 %}
+    <section class="content">
+      <h2>{{ page.items_heading | default: "Latest" }}</h2>
+      <div class="filters" role="group" aria-label="Filter by type">
+        <button type="button" class="filter is-active" data-filter="all">All</button>
+        {% for t in page.types %}
+        <button type="button" class="filter" data-filter="{{ t }}">{{ t }}</button>
+        {% endfor %}
+      </div>
+      <div id="news-list">
+        {% for item in page.items %}
+        <article class="news-item" data-type="{{ item.type }}">
+          <time>{{ item.date }}</time> <span class="tag">{{ item.type }}</span>
+          <h3>{% if item.link %}<a href="{{ item.link }}">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}</h3>
+          {% if item.text %}<p>{{ item.text }}</p>{% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      <p id="news-empty" class="small" hidden>Nothing here yet.</p>
+    </section>
+    <script>
+      (function () {
+        var buttons = document.querySelectorAll('.filter');
+        var items = document.querySelectorAll('#news-list .news-item');
+        var empty = document.getElementById('news-empty');
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var f = btn.getAttribute('data-filter');
+            var shown = 0;
+            buttons.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+            items.forEach(function (it) {
+              var show = f === 'all' || it.getAttribute('data-type') === f;
+              it.hidden = !show;
+              if (show) shown++;
+            });
+            empty.hidden = shown > 0;
+          });
+        });
+      })();
+    </script>
+    {% endif %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>{{ site.title }}</strong> · {{ site.institution }}</p>
+      <p>{{ site.funding_note }}</p>
+    </div>
+  </footer>
+</body>
+</html>
